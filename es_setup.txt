@@ -1,0 +1,35 @@
+curl -XPUT https://search-chatbot-55g4zpvq3dljfj2eurlrralw44.us-east-1.es.amazonaws.com/restaurants?pretty=true
+
+curl -XPUT https://search-chatbot-55g4zpvq3dljfj2eurlrralw44.us-east-1.es.amazonaws.com/restaurants/_mapping/Restaurant?pretty=true -H'Content-Type: application/json' -d '
+{
+        "properties" : {
+            "Business_ID" : { "type" : "text"},
+            "Cuisine" : { "type" : "text"}
+        }
+}
+'
+
+curl -XPOST https://search-chatbot-55g4zpvq3dljfj2eurlrralw44.us-east-1.es.amazonaws.com/_bulk?pretty=true --data-binary @bulk.json -H 'Content-Type: application/json'
+
+
+curl -XGET https://search-chatbot-55g4zpvq3dljfj2eurlrralw44.us-east-1.es.amazonaws.com/restaurants/Restaurant/_search?pretty=true -H'Content-Type: application/json' -d '
+{ 
+    "query" : {
+        "query_string" : {
+            "query" : "chinese"
+        }
+    }
+}
+'
+
+curl -XGET https://search-chatbot-55g4zpvq3dljfj2eurlrralw44.us-east-1.es.amazonaws.com/restaurants/Restaurant/_search?pretty=true -H'Content-Type: application/json' -d '
+{
+  "size": 1,
+  "query": {
+    "function_score" : {
+      "query" : { "match": { "Cuisine": "chinese" } },
+      "random_score" : {}
+    }
+  }
+}
+'
