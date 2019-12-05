@@ -1,2 +1,2 @@
 # DiningConcierge
-COMS 6998 HW1
+Build a dining concierge bot to give customers dinning suggestions based on their conservation with the bot.
